@@ -1,6 +1,6 @@
 <?php
 /**
- * Functions PHP Ver 1.1.0
+ * Functions PHP Ver 1.2.0
  */
 
 
@@ -22,7 +22,7 @@ function aralco_remove_css() {
  * @how-to        Get CustomizeWoo.com FREE
  * @sourcecode    https://businessbloomer.com/?p=19572
  * @author        Rodolfo Melogli
- * @testedwith    WooCommerce 4.1.1
+ * @testedwith    WooCommerce 4.2.0
  */
 add_action('wp', 'aralco_remove_sidebar_product_pages');
 function aralco_remove_sidebar_product_pages() {
@@ -37,7 +37,7 @@ function aralco_remove_sidebar_product_pages() {
  * @how-to        Get CustomizeWoo.com FREE
  * @sourcecode    https://businessbloomer.com/?p=19572
  * @author        Rodolfo Melogli
- * @testedwith    WooCommerce 4.1.1
+ * @testedwith    WooCommerce 4.2.0
  */
 add_action('get_header', 'aralco_remove_storefront_sidebar');
 function aralco_remove_storefront_sidebar() {
@@ -50,7 +50,7 @@ function aralco_remove_storefront_sidebar() {
 /**
  * @snippet       Adds Powered By Aralco Footer
  * @author        Elias Turner, Aralco
- * @testedwith    WooCommerce 4.1.1
+ * @testedwith    WooCommerce 4.2.0
  */
 add_action('storefront_credit_links_output', 'aralco_do_footer', 25);
 function aralco_do_footer($content) {
@@ -66,7 +66,7 @@ function aralco_do_footer($content) {
 /**
  * @snippet       Override string translation
  * @author        Elias Turner, Aralco
- * @testedwith    WooCommerce 4.1.1
+ * @testedwith    WooCommerce 4.2.0
  */
 add_filter('gettext', 'aralco_override_string', 10, 3);
 function aralco_override_string($translation, $text, $domain) {
@@ -79,6 +79,29 @@ function aralco_override_string($translation, $text, $domain) {
     return $translation;
 }
 
+/**
+ * @snippet       Adds a alternative secondary nav
+ * @author        Elias Turner, Aralco
+ * @testedwith    WooCommerce 4.2.0
+ */
+register_nav_menus(
+    apply_filters(
+        'storefront_aralco_register_nav_menu', array(
+            'secondary-alt'  => __( 'Secondary Alt Menu', 'storefront_aralco' ),
+        )
+    )
+);
+add_filter('storefront_header', 'aralco_second_nav', 70);
+function aralco_second_nav() {
+    ?><div class="secondary-nav"><div class="col-full"><?php
+    wp_nav_menu(
+        array(
+            'theme_location'  => 'secondary-alt',
+//            'container_class' => 'secondary-nav'
+        )
+    );
+    ?></div></div><?php
+}
 
 ///**
 // * @snippet       Adds our custom CSS
