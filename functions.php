@@ -1,6 +1,6 @@
 <?php
 /**
- * Functions PHP Ver 1.2.0
+ * Functions PHP Ver 1.2.1
  */
 
 
@@ -93,23 +93,35 @@ register_nav_menus(
 );
 add_filter('storefront_header', 'aralco_second_nav', 70);
 function aralco_second_nav() {
-    ?><div class="secondary-nav"><div class="col-full"><?php
-    wp_nav_menu(
-        array(
-            'theme_location'  => 'secondary-alt',
-//            'container_class' => 'secondary-nav'
-        )
-    );
-    ?></div></div><?php
+    if(!has_nav_menu('secondary-alt')) return; // Nothing to do
+    ?><div class="secondary-nav"><div class="col-full">
+        <a href="#" class="nav-shift move-left" aria-hidden="true"><span class="dashicons dashicons-arrow-left-alt2"></span></a>
+        <?php
+        wp_nav_menu(
+            array(
+                'theme_location'  => 'secondary-alt'
+            )
+        );
+        ?>
+        <a href="#" class="nav-shift move-right" aria-hidden="true"><span class="dashicons dashicons-arrow-right-alt2"></span></a>
+    </div></div><script>
+        jQuery('.nav-shift').on('click', function (e) {
+            console.log('hit');
+            e.preventDefault();
+            let target = (jQuery(this).hasClass('move-right'))? 1000 : 0;
+            jQuery('#menu-secondary')[0].scrollTo({left: target, behavior: 'smooth'})
+        })
+    </script><?php
 }
 
-///**
-// * @snippet       Adds our custom CSS
-// * @author        Elias Turner, Aralco
-// * @testedwith    WooCommerce 4.1.0
-// */
-//add_action('wp_enqueue_scripts', 'aralco_add_css', 999);
-//function aralco_add_css($content) {
+/**
+ * @snippet       Adds our custom CSS
+ * @author        Elias Turner, Aralco
+ * @testedwith    WooCommerce 4.2.0
+ */
+add_action('wp_enqueue_scripts', 'aralco_add_css', 999);
+function aralco_add_css($content) {
+    wp_enqueue_style('dashicons');
 //    global $aralco_ver;
 //    wp_enqueue_style('aralco_storefront', get_stylesheet_directory_uri() . '/style.css', array(), $aralco_ver);
-//}
+}
