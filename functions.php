@@ -1,6 +1,6 @@
 <?php
 /**
- * Functions PHP Ver 1.2.1
+ * Functions PHP Ver 1.2.2
  */
 
 
@@ -68,14 +68,14 @@ function aralco_do_footer($content) {
  * @author        Elias Turner, Aralco
  * @testedwith    WooCommerce 4.2.0
  */
-add_filter('gettext', 'aralco_override_string', 10, 3);
+add_filter('gettext', 'aralco_override_string', 999, 3);
 function aralco_override_string($translation, $text, $domain) {
     if ($domain == 'woocommerce') {
         if ($text == 'Please select some product options before adding this product to your cart.') {
-            $translation = 'Please select product options before adding this product to your cart.';
+            return 'Please select product options before adding this product to your cart.';
         }
+        return str_ireplace(array('Category', 'Categories'), array('Department', 'Departments'), $text);
     }
-
     return $translation;
 }
 
@@ -124,4 +124,41 @@ function aralco_add_css($content) {
     wp_enqueue_style('dashicons');
 //    global $aralco_ver;
 //    wp_enqueue_style('aralco_storefront', get_stylesheet_directory_uri() . '/style.css', array(), $aralco_ver);
+}
+
+/**
+ * @snippet       Overrides the default display post taxonomies
+ * @author        Elias Turner, Aralco
+ * @testedwith    WooCommerce 4.2.0
+ */
+add_action('init', 'aralco_replace_action_post_taxonomy');
+function aralco_replace_action_post_taxonomy(){
+    remove_action('storefront_loop_post', 'storefront_post_taxonomy', 40);
+    remove_action('storefront_single_post_bottom', 'storefront_post_taxonomy', 5);
+    add_action('storefront_loop_post', 'aralco_post_taxonomy', 40);
+    add_action('storefront_single_post_bottom', 'aralco_post_taxonomy', 5);
+}
+function aralco_post_taxonomy() {
+    /* translators: used between list items, there is a space after the comma */
+    $categories_list = get_the_category_list( __( ', ', 'storefront' ) );
+
+    /* translators: used between list items, there is a space after the comma */
+    $tags_list = get_the_tag_list( '', __( ', ', 'storefront' ) );
+    ?>
+
+    <aside class="entry-taxonomy">
+        <?php if ( $categories_list ) : ?>
+            <div class="cat-links">
+                <?php echo esc_html( _n( 'Department:', 'Departments:', count( get_the_category() ), 'storefront' ) ); ?> <?php echo wp_kses_post( $categories_list ); ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if ( $tags_list ) : ?>
+            <div class="tags-links">
+                <?php echo esc_html( _n( 'Tag:', 'Tags:', count( get_the_tags() ), 'storefront' ) ); ?> <?php echo wp_kses_post( $tags_list ); ?>
+            </div>
+        <?php endif; ?>
+    </aside>
+
+    <?php
 }
