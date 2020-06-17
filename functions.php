@@ -1,6 +1,6 @@
 <?php
 /**
- * Functions PHP Ver 1.2.2
+ * Functions PHP Ver 1.2.3
  */
 
 
@@ -127,6 +127,7 @@ function aralco_add_css($content) {
 }
 
 /**
+ * Copied from Storefront and modified
  * @snippet       Overrides the default display post taxonomies
  * @author        Elias Turner, Aralco
  * @testedwith    WooCommerce 4.2.0
@@ -161,4 +162,68 @@ function aralco_post_taxonomy() {
     </aside>
 
     <?php
+}
+
+/**
+ * Copied from Storefront and modified
+ * @snippet       Display a menu intended for use on handheld devices
+ * @author        Elias Turner, Aralco
+ * @testedwith    WooCommerce 4.2.0
+ */
+
+function storefront_handheld_footer_bar() {
+    $links = array(
+        'my-account'        => array(
+            'priority' => 10,
+            'callback' => 'storefront_handheld_footer_bar_account_link',
+        ),
+        'advanced-search'   => array(
+            'priority' => 20,
+            'callback' => 'storefront_handheld_footer_bar_search',
+        ),
+        'cart'              => array(
+            'priority' => 30,
+            'callback' => 'storefront_handheld_footer_bar_cart_link',
+        ),
+    );
+
+    if (did_action('woocommerce_blocks_enqueue_cart_block_scripts_after') || did_action('woocommerce_blocks_enqueue_checkout_block_scripts_after')) {
+        return;
+    }
+
+    if (wc_get_page_id('myaccount') === -1) {
+        unset($links['my-account']);
+    }
+
+    if (wc_get_page_id('cart') === -1) {
+        unset($links['cart']);
+    }
+
+    $links = apply_filters('storefront_handheld_footer_bar_links', $links);
+    ?>
+    <div class="storefront-handheld-footer-bar">
+        <ul class="columns-<?php echo count($links); ?>">
+            <?php foreach ($links as $key => $link): ?>
+                <li class="<?php echo esc_attr($key); ?>">
+                    <?php
+                    if ($link['callback']) {
+                        call_user_func($link['callback'], $key, $link);
+                    }
+                    ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+    <?php
+}
+
+/**
+ * Copied from Storefront and modified
+ * @snippet       The search callback function for the handheld footer bar
+ * @author        Elias Turner, Aralco
+ * @testedwith    WooCommerce 4.2.0
+ */
+function storefront_handheld_footer_bar_search() {
+    echo '<a href="' . get_permalink(get_page_by_path('advanced-search')) . '">' . esc_attr__( 'Search', 'storefront' ) . '</a>';
+//    storefront_product_search();
 }
