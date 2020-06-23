@@ -1,6 +1,6 @@
 <?php
 /**
- * Functions PHP Ver 1.2.3
+ * Functions PHP Ver 1.3.0
  */
 
 
@@ -226,4 +226,32 @@ function storefront_handheld_footer_bar() {
 function storefront_handheld_footer_bar_search() {
     echo '<a href="' . get_permalink(get_page_by_path('advanced-search')) . '">' . esc_attr__( 'Search', 'storefront' ) . '</a>';
 //    storefront_product_search();
+}
+
+/**
+ * @snippet       Allows to check if a page slug exists
+ * @author        Elias Turner, Aralco
+ * @testedwith    WooCommerce 4.2.0
+ */
+function aralco_the_slug_exists($post_name) {
+    global $wpdb;
+    return boolval(
+        $wpdb->get_row(
+            "SELECT post_name FROM " . $wpdb->prefix . "posts WHERE post_name = '" . $post_name . "'",
+            'ARRAY_A'
+        )
+    );
+}
+
+/**
+ * @snippet       If the advanced search page slug exists, Adds a button to the search field to jump to advanced search page
+ * @author        Elias Turner, Aralco
+ * @testedwith    WooCommerce 4.2.0
+ */
+if(aralco_the_slug_exists('advanced-search')) {
+    $the_ref = home_url('/advanced-search/');
+    wc_enqueue_js(/** @lang JavaScript */
+"$('.site-search .aws-search-form').after('<a href=\"{$the_ref}\">Advanced<br>Search</a>');
+$('.site-search .aws-container').addClass('flex-for-button');"
+    );
 }
