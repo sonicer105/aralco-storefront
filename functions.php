@@ -1,6 +1,6 @@
 <?php
 /**
- * Functions PHP Ver 1.3.1
+ * Functions PHP Ver 1.3.2
  */
 
 
@@ -254,4 +254,17 @@ if(aralco_the_slug_exists('advanced-search')) {
 "$('.site-search .aws-search-form').after('<a href=\"{$the_ref}\">Advanced<br>Search</a>');
 $('.site-search .aws-container').addClass('flex-for-button');"
     );
+}
+
+add_filter('woocommerce_login_redirect', 'aralco_redirect_login', 100, 1);
+function aralco_redirect_login($redirect) {
+
+    $redirect_page_id = url_to_postid($redirect);
+    $checkout_page_id = wc_get_page_id('checkout');
+
+    if ($redirect_page_id == $checkout_page_id) {
+        return $redirect;
+    }
+
+    return get_home_url();
 }
