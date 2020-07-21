@@ -166,9 +166,22 @@ Text Domain: storefront
   }
 }
 .flex-filter-buttons {
+  padding-top: 1em;
   display: flex;
   justify-content: space-between;
 }
+
+/* Page Mobile No Content */
+@media screen and (max-width: 767px) {
+  .storefront-breadcrumb {
+    padding-bottom: 0;
+    margin-bottom: 0.5em;
+  }
+  .page-template-page-no-content-mobile .content-area {
+    display: none;
+  }
+}
+
 
 /* WooCommerce System Messages Color */
 .woocommerce-message, .woocommerce-info, .woocommerce-error, .woocommerce-noreviews, p.no-comments {
