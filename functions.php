@@ -1,6 +1,6 @@
 <?php
 /**
- * Functions PHP Ver 1.3.0
+ * Functions PHP Ver 1.3.1
  */
 
 
