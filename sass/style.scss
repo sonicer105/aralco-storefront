@@ -1,7 +1,7 @@
 /*!
 Theme Name: Aralco Storefront
 Theme URI: https://github.com/sonicer105/storefront-aralco
-Version: 1.3.2
+Version: 1.3.3
 Author: Elias Turner, Aralco
 Author URI: https://aralco.com
 Template: storefront
@@ -191,6 +191,9 @@ Text Domain: storefront
 /* Quantity Color */
 .stock {
   color: #546d96 !important;
+}
+.stock.available-on-backorder, .stock.out-of-stock {
+    color: #cc0000 !important;
 }
 
 /* Utils */

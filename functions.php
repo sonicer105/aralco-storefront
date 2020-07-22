@@ -1,8 +1,9 @@
 <?php
 /**
- * Functions PHP Ver 1.3.2
+ * Functions PHP Ver 1.3.3
  */
 
+define('ARALCO_THEME_SLUG', 'storefront-aralco');
 
 /**
  * @snippet       Removes the Core Storefront Styles from running.
@@ -256,6 +257,11 @@ $('.site-search .aws-container').addClass('flex-for-button');"
     );
 }
 
+/**
+ * @snippet       Redirect user to homepage after login as long as they are not logging in from the cart page
+ * @author        Elias Turner, Aralco
+ * @testedwith    WooCommerce 4.3.1
+ */
 add_filter('woocommerce_login_redirect', 'aralco_redirect_login', 100, 1);
 function aralco_redirect_login($redirect) {
 
@@ -267,4 +273,41 @@ function aralco_redirect_login($redirect) {
     }
 
     return get_home_url();
+}
+
+/**
+ * @snippet       Modify the way stock is displayed
+ * @author        Elias Turner, Aralco
+ * @testedwith    WooCommerce 4.3.1
+ */
+add_filter('woocommerce_get_availability_text', 'aralco_get_availability_text', 100, 2);
+function aralco_get_availability_text($text, $product) {
+    /* @var $product WC_Product */
+    if (!$product->is_in_stock()) {
+        return __('Not Available', ARALCO_THEME_SLUG);
+    } else if ($product->managing_stock() && $product->is_on_backorder(1)) {
+        return $product->backorders_require_notification()? __('Sold Out', ARALCO_THEME_SLUG) : '';
+    } else if (!$product->managing_stock() && $product->is_on_backorder(1)) {
+        return __('Sold Out', ARALCO_THEME_SLUG);
+    } else if ($product->managing_stock()) {
+        $display = __('Available', ARALCO_THEME_SLUG);
+        $stock_amount = $product->get_stock_quantity();
+        switch (get_option('woocommerce_stock_format')) {
+            case 'low_amount':
+//                if ($stock_amount <= get_option('woocommerce_notify_low_stock_amount')) {
+//                    /* translators: %s: stock amount */
+//                    $display = sprintf(__('Only %s left in stock', 'woocommerce'), wc_format_stock_quantity_for_display($stock_amount, $product));
+//                }
+//                break;
+            case '':
+                /* translators: %s: stock amount */
+                $display = sprintf(__('%s available', ARALCO_THEME_SLUG), wc_format_stock_quantity_for_display($stock_amount, $product));
+                break;
+        }
+//        if ($product->backorders_allowed() && $product->backorders_require_notification()) {
+//            $display .= ' ' . __('(can be backordered)', 'woocommerce');
+//        }
+        return $display;
+    }
+    return $text;
 }
