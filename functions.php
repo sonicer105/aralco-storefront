@@ -1,6 +1,6 @@
 <?php
 /**
- * Functions PHP Ver 1.3.3
+ * Functions PHP Ver 1.3.4
  */
 
 define('ARALCO_THEME_SLUG', 'storefront-aralco');
@@ -278,7 +278,7 @@ function aralco_redirect_login($redirect) {
 /**
  * @snippet       Modify the way stock is displayed
  * @author        Elias Turner, Aralco
- * @testedwith    WooCommerce 4.3.1
+ * @testedwith    WooCommerce 4.4.1
  */
 add_filter('woocommerce_get_availability_text', 'aralco_get_availability_text', 100, 2);
 function aralco_get_availability_text($text, $product) {
@@ -286,7 +286,7 @@ function aralco_get_availability_text($text, $product) {
     if (!$product->is_in_stock()) {
         return __('Not Available', ARALCO_THEME_SLUG);
     } else if ($product->managing_stock() && $product->is_on_backorder(1)) {
-        return $product->backorders_require_notification()? __('Sold Out', ARALCO_THEME_SLUG) : '';
+        return /*$product->backorders_require_notification()?*/ __('Sold Out', ARALCO_THEME_SLUG) /*: ''*/;
     } else if (!$product->managing_stock() && $product->is_on_backorder(1)) {
         return __('Sold Out', ARALCO_THEME_SLUG);
     } else if ($product->managing_stock()) {
