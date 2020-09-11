@@ -1,13 +1,24 @@
 /*!
 Theme Name: Aralco Storefront
 Theme URI: https://github.com/sonicer105/storefront-aralco
-Version: 1.3.4
+Version: 1.4.0
 Author: Elias Turner, Aralco
 Author URI: https://aralco.com
 Template: storefront
 Description: A child theme for Storefront by Aralco for Aralco's Demo Store
 Text Domain: storefront
 */
+
+.has-white-color {
+  color: #ffffff !important;
+}
+
+.has-huge-font-size {
+  font-size: 6rem !important;
+}
+.has-large-font-size {
+  font-size: 4rem !important;
+}
 
 /* Shopping Page CSS - Equal Image Size */
 .products.columns-4 img {
@@ -38,8 +49,10 @@ Text Domain: storefront
 }
 
 /* Secondary Nav */
+.site-header {
+  border-bottom: none;
+}
 .secondary-nav {
-  background: #333;
   ul {
     list-style: none;
     margin-left: -1em;
@@ -53,7 +66,6 @@ Text Domain: storefront
   .menu-secondary-container {
     a {
       display: block;
-      color: #fff;
       padding: 0.5em 1em;
     }
   }

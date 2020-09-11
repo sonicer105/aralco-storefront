@@ -6,6 +6,52 @@
 define('ARALCO_THEME_SLUG', 'storefront-aralco');
 
 /**
+ * @snippet     Allows you to customize a few colors/settings in the theme
+ * @author      Elias Turner, Aralco
+ * @testedwith  WooCommerce 4.5.1
+ */
+add_action('customize_register', 'aralco_customize_register');
+function aralco_customize_register($wp_customize) {
+    //All our sections, settings, and controls will be added here
+    $wp_customize->add_setting('secondary_nav_color', array(
+        'default' => "#ffffff",
+        'transport' => 'refresh',
+    ));
+    $wp_customize->add_setting('secondary_nav_bg_color', array(
+        'default' => "#333333",
+        'transport' => 'refresh',
+    ));
+
+    $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'secondary_nav_color', array(
+        'label' => __('Secondary Nav Text Color', ARALCO_THEME_SLUG),
+        'section' => 'header_image',
+    )));
+    $wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'secondary_nav_bg_color', array(
+        'label' => __('Secondary Nav Background Color', ARALCO_THEME_SLUG),
+        'section' => 'header_image',
+    )));
+}
+
+/**
+ * @snippet     Applies the CSS from the options selected in aralco_customize_register
+ * @author      Elias Turner, Aralco
+ * @testedwith  WooCommerce 4.5.1
+ */
+add_action( 'wp_head', 'aralco_customize_css');
+function aralco_customize_css() {
+    ?>
+    <style type="text/css">
+        .secondary-nav {
+            background-color: <?php echo get_theme_mod('secondary_nav_bg_color', "#333333"); ?>;
+        }
+        .secondary-nav .menu-secondary-container a {
+            color: <?php echo get_theme_mod('secondary_nav_color', "#ffffff"); ?>;
+        }
+    </style>
+    <?php
+}
+
+/**
  * @snippet       Removes the Core Storefront Styles from running.
  * @author        Elias Turner, Aralco
  * @testedwith    WooCommerce 4.1.1
