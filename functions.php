@@ -1,6 +1,6 @@
 <?php
 /**
- * Functions PHP Ver 1.3.4
+ * Functions PHP Ver 1.4.3
  */
 
 define('ARALCO_THEME_SLUG', 'storefront-aralco');
@@ -156,7 +156,7 @@ function aralco_second_nav() {
             console.log('hit');
             e.preventDefault();
             let target = (jQuery(this).hasClass('move-right'))? 1000 : 0;
-            jQuery('#menu-secondary')[0].scrollTo({left: target, behavior: 'smooth'})
+            jQuery('.secondary-nav ul')[0].scrollTo({left: target, behavior: 'smooth'})
         })
     </script><?php
 }
